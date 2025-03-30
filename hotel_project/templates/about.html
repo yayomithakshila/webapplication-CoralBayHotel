@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Grand Luxury Hotel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <!-- Include header -->
+    {% include 'header.html' %}
+
+    <!-- Full-Screen Hotel Image with Centered Text -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Welcome to Coral Bay Hotel</h2>
+            <p>Where comfort meets affordability.</p>
+        </div>
+    </section>
+
+    <!-- About Us Content Section -->
+    <section class="about">
+        <h2>About Our Hotel</h2>
+        <div class="about-text">
+            <p>At Coral Bay Hotel, we offer a relaxed and affordable beachside getaway. Our cozy rooms provide comfort and a peaceful atmosphere, perfect for a laid-back vacation. Located just steps from the beach, our hotel gives you the best of both worlds: relaxation and convenience.</p>
+            <p>Whether you're here to unwind by the ocean or explore the local attractions, we provide everything you need for a memorable stay. From casual dining to comfortable rooms, we ensure your stay is stress-free and enjoyable, all at a price that won’t break the bank.</p>
+
+        </div>
+    </section>
+
+    <!-- Include footer -->
+    {% include 'footer.html' %}
+
+</body>
+</html>

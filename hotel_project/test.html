@@ -1,0 +1,120 @@
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
+from flask import flash, redirect, url_for
+
+app = Flask(__name__)
+
+# Configure the database (SQLite for now)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bookings.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Configure Flask-Mail for email notifications
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'coralbayhoteltest@gmail.com'  # Use your email
+app.config['MAIL_PASSWORD'] = 'hvci pojl pllw ptgm'  # Use your password or app password
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+
+# Initialize the database and mail
+db = SQLAlchemy(app)
+mail = Mail(app)
+
+# Create the Booking model (stores booking info)
+class Booking(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    room_type = db.Column(db.String(100), nullable=False)
+    check_in_date = db.Column(db.String(20), nullable=False)
+    check_out_date = db.Column(db.String(20), nullable=False)
+
+    def __repr__(self):
+        return f"<Booking {self.name}, {self.room_type}>"
+
+# Create the tables in the database
+with app.app_context():
+    db.create_all()
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+# Booking route
+@app.route('/book', methods=['GET', 'POST'])
+def book():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        room_type = request.form['room_type']
+        check_in_date = request.form['check_in_date']
+        check_out_date = request.form['check_out_date']
+
+        # Save the booking to the database
+        new_booking = Booking(name=name, email=email, room_type=room_type, 
+                      check_in_date=check_in_date, check_out_date=check_out_date)
+        db.session.add(new_booking)
+        db.session.commit()
+
+        # Send email confirmation to user
+        msg = Message('Booking Confirmation - Coral Bay Hotel', sender='your_email@gmail.com', recipients=[email])
+        msg.body = f"""
+        Dear {name},
+
+        Thank you for booking with Coral Bay Hotel! Your reservation is confirmed. Here are the details:
+
+        Room Type: {room_type}
+        Check-In Date: {check_in_date}
+        Check-Out Date: {check_out_date}
+
+        Hotel Contact Details:
+        Phone: +94 234 567 890
+        Email: coralbayhoteltest@gmail.com
+        Address: 123 Coral Street, Hikkaduwa, Sri Lanka
+
+        If you are unable to make it or if your plans change, please inform us as soon as possible so we can adjust your booking accordingly.
+
+        We look forward to welcoming you to our hotel!
+
+        Best regards,
+        The Coral Bay Hotel Team
+        """
+        mail.send(msg)
+
+        # Send email notification to the hotel about the new booking
+        msg_hotel = Message('New Booking Notification - Coral Bay Hotel', sender='your_email@gmail.com', recipients=['coralbayhoteltest@gmail.com'])
+        msg_hotel.body = f"""
+        A new booking has been made at Coral Bay Hotel. Here are the details:
+
+        Guest Name: {name}
+        Guest Email: {email}
+        Room Type: {room_type}
+        Check-In Date: {check_in_date}
+        Check-Out Date: {check_out_date}
+
+        Please review the booking and prepare for the guest’s arrival.
+
+        The Coral Bay Hotel System
+        """
+        mail.send(msg_hotel)
+
+
+        # Flash success message to the user
+        flash('Booking successful! You will receive a confirmation email shortly.', 'success')
+
+        # Redirect back to the booking page or home page
+        return redirect(url_for('home'))  # Adjust based on your route
+
+    return render_template('book.html')
+
+if __name__ == '__main__':
+    app.run(debug=True)

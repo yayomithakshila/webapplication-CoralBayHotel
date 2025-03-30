@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Stay - Coral Bay Hotel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Include some custom styles for success/error messages -->
+    <style>
+        .message-box {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success-message {
+            color: green;
+            background-color: #d4edda;
+        }
+        .error-message {
+            color: red;
+            background-color: #f8d7da;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Include the header -->
+    {% include 'header.html' %}
+
+    <!-- Display message box if a message is passed -->
+    {% if message %}
+        <div class="message-box {% if 'error' in message.lower() %}error-message{% else %}success-message{% endif %}">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <section class="booking-section">
+        <h2>Book Your Stay</h2>
+
+        <!-- Room Selection with Images and Prices -->
+        <div class="room-options">
+            <div class="room">
+                <img src="{{ url_for('static', filename='images/single_room.jpg') }}" alt="Single Room">
+                <h3>Single Room</h3>
+                <p>Perfect for solo travelers, our cozy single room offers a comfortable stay with all essential amenities.</p>
+                <p class="price">$50 per night</p>
+            </div>
+            <div class="room">
+                <img src="{{ url_for('static', filename='images/double_room.jpg') }}" alt="Double Room">
+                <h3>Double Room</h3>
+                <p>Ideal for couples or friends, our spacious double room features a relaxing ambiance with modern facilities.</p>
+                <p class="price">$80 per night</p>
+            </div>
+            <div class="room">
+                <img src="{{ url_for('static', filename='images/family_room.jpg') }}" alt="Family Room">
+                <h3>Family Room</h3>
+                <p>Experience comfort for the whole family. Our family room offers spacious accommodations and premium comfort.</p>
+                <p class="price">$120 per night</p>
+            </div>
+        </div>
+
+        <!-- Booking Form -->
+        <form method="POST" class="booking-form">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" value="{{ request.form['name'] if 'name' in request.form else '' }}" required>
+
+            <label for="email">Email Address:</label>
+            <input type="email" id="email" name="email" value="{{ request.form['email'] if 'email' in request.form else '' }}" required>
+
+            <label for="room_type">Room Type:</label>
+            <select id="room_type" name="room_type" required>
+                {% for type in room_types %}
+                    <option value="{{ type }}" {% if type == selected_room_type %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="check_in_date">Check-In Date:</label>
+            <input type="date" id="check_in_date" name="check_in_date" value="{{ request.form['check_in_date'] if 'check_in_date' in request.form else '' }}" required>
+
+            <label for="check_out_date">Check-Out Date:</label>
+            <input type="date" id="check_out_date" name="check_out_date" value="{{ request.form['check_out_date'] if 'check_out_date' in request.form else '' }}" required>
+
+            <script>
+                // Get today's date
+                const today = new Date().toISOString().split('T')[0];
+
+                // Set the minimum date for check-in and check-out
+                document.getElementById('check_in_date').setAttribute('min', today);
+                document.getElementById('check_out_date').setAttribute('min', today);
+            </script>
+
+            <!-- Check Availability Button -->
+            <button type="submit" name="action" value="check_availability">Check Availability</button>
+        </form>
+
+        {% if available_rooms %}
+            <h3>Available Rooms:</h3>
+            <ul>
+                {% for room in available_rooms %}
+                    <li>
+                        Room Number: {{ room.room_number }} - {{ room.room_type }}
+                        <form method="POST" class="booking-form">
+                            <input type="hidden" name="name" value="{{ request.form['name'] }}">
+                            <input type="hidden" name="email" value="{{ request.form['email'] }}">
+                            <input type="hidden" name="room_id" value="{{ room.id }}">
+                            <input type="hidden" name="check_in_date" value="{{ request.form['check_in_date'] }}">
+                            <input type="hidden" name="check_out_date" value="{{ request.form['check_out_date'] }}">
+                            <button type="submit" name="action" value="confirm_booking">Confirm Booking</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </section>
+
+    <!-- Include the footer -->
+    {% include 'footer.html' %}
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Include the header -->
+    {% include 'header.html' %}
+
+<!-- Full-Screen Hotel Image with Centered Text -->
+<section class="hero">
+    <div class="hero-text">
+        <h2>Book Your Stay with Us</h2>
+        <p>Where comfort meets affordability</p>
+        <!-- Add a button or link to go to the booking page -->
+        <a href="{{ url_for('book') }}" class="book-now-btn">Book Now</a>
+    </div>
+</section>
+
+
+    <!-- 📸 Image Gallery Section -->
+    <section class="gallery">
+        <h2>Photo Gallery</h2>
+        <div class="gallery-container">
+            <img src="{{ url_for('static', filename='images/room1.jpg') }}" alt="Room 1">
+            <img src="{{ url_for('static', filename='images/room2.jpg') }}" alt="Room 2">
+            <img src="{{ url_for('static', filename='images/pool.jpg') }}" alt="Swimming Pool">
+            <img src="{{ url_for('static', filename='images/restaurent.jpg') }}" alt="Restaurant">
+        </div>
+    </section>
+    
+    <head>
+        <title>Hotel Chatbot</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='chatbot.css') }}">
+    </head>
+    <body>
+    
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <title>Hotel Chatbot</title>
+        </head>
+        <body>
+        
+            <h2>Welcome to Coral Bay Hotel</h2>
+            <p>Ask our chatbot anything about the hotel!</p>
+        
+            <!-- Embed the chatbot here -->
+            <iframe width="350" height="430" allow="microphone;" src="https://console.dialogflow.com/api-client/demo/embedded/cf89ec16-32dc-43fe-b35f-19d568b8a62d"></iframe>
+        
+        </body>
+        </html>
+
+    <!-- Include the footer -->
+    {% include 'footer.html' %}
+</body>
+</html>

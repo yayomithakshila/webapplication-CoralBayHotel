@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Coral Bay Hotel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Include the header -->
+    {% include 'header.html' %}
+
+    <!-- Full-Screen Hotel Image with Centered Text -->
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Contact Us</h2>
+            <p>We'd love to hear from you. Get in touch with us!</p>
+        </div>
+    </section>
+
+    <!-- Contact Information Section -->
+    <section class="contact-info">
+        <h2>Our Contact Information</h2>
+        <div class="contact-details">
+            <p><i class="fas fa-phone-alt"></i> +94 234 567 890</p>
+            <p><i class="fas fa-envelope"></i> contact@coralbayhotel.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> 123 Coral Street, Hikkaduwa, Sri Lanka</p>
+        </div>
+    </section>
+
+    <!-- Footer Section with Direct Copyright Text -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Coral Bay Hotel. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
